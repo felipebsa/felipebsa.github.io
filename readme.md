@@ -2,7 +2,7 @@
 
 Personal portfolio site built with plain HTML, CSS and JavaScript — no frameworks, no build step, no backend.
 
-🔗 Live: _add link after deploying_
+[live](https://felipebsa.github.io)
 
 ## About
 
