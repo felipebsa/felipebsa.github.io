@@ -1,8 +1,6 @@
-# Felipe Barbosa — Personal Portfolio
+# Felipe Barbosa — Personal Portfolio [live](https://felipebsa.github.io)
 
 Personal portfolio site built with plain HTML, CSS and JavaScript — no frameworks, no build step, no backend.
-
-[live](https://felipebsa.github.io)
 
 ## About
 
