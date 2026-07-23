@@ -38,6 +38,7 @@ site/
     ├── proj-nippon.jpg / .webp
     ├── proj-cvvj.jpg / .webp
     ├── proj-contractsys.jpg / .webp
+    ├── proj-loctis.jpg / .webp
     ├── favicon.svg
     └── felipe-barbosa-curriculo.pdf
 ```
