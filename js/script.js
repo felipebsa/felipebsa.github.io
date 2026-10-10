@@ -106,7 +106,8 @@ if (matchMedia('(hover: hover)').matches) {
   root.addEventListener('pointerleave', () => luz.classList.remove('is-on'));
 }
 
-// chuva na lateral esquerda
+// chuva
+// no pc ela fica na lateral esquerda; no celular vai pro fundo, bem fraquinha
 // cada gota cai reta e termina num traço tipo ------\____/--
 // as posições são da página, então a chuva não acompanha a rolagem
 const canvas = document.getElementById('rain');
@@ -115,6 +116,8 @@ const ctx = canvas.getContext('2d');
 const LARGURA_CONTEUDO = 1184;
 const GRADE = 12;
 const DENSIDADE = 0.00006;
+const DENSIDADE_FUNDO = 0.000018; // umas 3 a 5 gotas na tela do celular
+const BRILHO_FUNDO = 0.75;
 const CORES = ['76, 29, 149', '91, 33, 182', '124, 58, 237'];
 
 let largura = 0;
@@ -124,6 +127,7 @@ let dpr = 1;
 let gotas = [];
 let rodando = false;
 let ultimoFrame = 0;
+let noFundo = false;
 
 const aleatorio = (min, max) => min + Math.random() * (max - min);
 const naGrade = (v) => Math.round(v / GRADE) * GRADE;
@@ -176,7 +180,7 @@ function novaGota(comecarNoMeio) {
     cabeca: comecarNoMeio ? aleatorio(0, total + rastro) : 0,
     velocidade: aleatorio(70, 190),
     cor: CORES[Math.floor(Math.random() * CORES.length)],
-    opacidade: aleatorio(0.35, 0.75),
+    opacidade: aleatorio(0.35, 0.75) * (noFundo ? BRILHO_FUNDO : 1),
   };
 }
 
@@ -205,7 +209,7 @@ function desenharGota(gota) {
     const atual = pontoNoCaminho(gota, d);
     const k = (d - de) / (gota.cabeca - de);
     ctx.strokeStyle = `rgba(${gota.cor}, ${gota.opacidade * k * k})`;
-    ctx.lineWidth = 0.4 + 1.3 * k;
+    ctx.lineWidth = (0.4 + 1.3 * k) * (noFundo ? 1.4 : 1);
     ctx.beginPath();
     ctx.moveTo(...anterior);
     ctx.lineTo(...atual);
@@ -217,9 +221,9 @@ function desenharGota(gota) {
     const [x, y] = pontoNoCaminho(gota, gota.cabeca);
     ctx.fillStyle = `rgba(167, 139, 250, ${gota.opacidade * 0.9})`;
     ctx.shadowColor = `rgba(${gota.cor}, 0.9)`;
-    ctx.shadowBlur = 6;
+    ctx.shadowBlur = noFundo ? 12 : 6;
     ctx.beginPath();
-    ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+    ctx.arc(x, y, noFundo ? 1.6 : 1.2, 0, Math.PI * 2);
     ctx.fill();
     ctx.shadowBlur = 0;
   }
@@ -245,26 +249,26 @@ function animar(agora) {
   requestAnimationFrame(animar);
 }
 
-function montarChuva() {
-  largura = Math.floor((innerWidth - LARGURA_CONTEUDO) / 2);
+function ajustarCanvas() {
   altura = innerHeight;
-  alturaPagina = root.scrollHeight;
-
-  // em tela menor não sobra espaço do lado
-  if (largura < 80) {
-    rodando = false;
-    canvas.style.display = 'none';
-    return;
-  }
-
-  dpr = Math.min(devicePixelRatio, 2);
-  canvas.style.display = 'block';
   canvas.style.width = largura + 'px';
   canvas.style.height = altura + 'px';
   canvas.width = largura * dpr;
   canvas.height = altura * dpr;
+}
 
-  const quantidade = Math.round(largura * alturaPagina * DENSIDADE);
+function montarChuva() {
+  const lateral = Math.floor((innerWidth - LARGURA_CONTEUDO) / 2);
+  alturaPagina = root.scrollHeight;
+  dpr = Math.min(devicePixelRatio, 2);
+
+  // em tela menor não sobra espaço do lado, então a chuva vai pro fundo
+  noFundo = lateral < 80;
+  largura = noFundo ? innerWidth : lateral;
+  canvas.classList.toggle('rain--fundo', noFundo);
+  ajustarCanvas();
+
+  const quantidade = Math.round(largura * alturaPagina * (noFundo ? DENSIDADE_FUNDO : DENSIDADE));
   gotas = Array.from({ length: quantidade }, () => novaGota(true));
 
   if (!rodando) {
@@ -281,7 +285,14 @@ if (!reduzirMovimento) {
     espera = setTimeout(montarChuva, 150);
   };
 
-  addEventListener('resize', remontar);
+  // no celular a barra do navegador muda a altura ao rolar;
+  // aí só ajusta o tamanho do canvas, sem sortear as gotas de novo
+  let ultimaLargura = innerWidth;
+  addEventListener('resize', () => {
+    if (innerWidth === ultimaLargura) return ajustarCanvas();
+    ultimaLargura = innerWidth;
+    remontar();
+  });
 
   // a página cresce quando as imagens terminam de carregar
   let ultimaAltura = 0;
