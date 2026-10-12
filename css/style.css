@@ -991,7 +991,6 @@ main {
   }
 }
 
-/* em cima do banner o texto da navbar fica sempre claro */
 .navbar:not(.is-scrolled) .nav-link {
   color: rgba(228, 219, 255, 0.72);
 }

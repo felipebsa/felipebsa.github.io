@@ -2,11 +2,11 @@
 
 [**felipebsa.github.io**](https://felipebsa.github.io)
 
-My personal portfolio, built with plain HTML, CSS and JavaScript. No frameworks, no build step, no backend.
+My personal portfolio, built with plain HTML, CSS and JavaScript.
 
 ## About
 
-A single page with my background, tech stack, projects, study repositories, work experience, academic awards and contact info. It's static, so it loads fast and can be hosted anywhere.
+A single page with my background, tech stack, projects, study repositories, work experience, academic awards and contact info.
 
 ## Features
 

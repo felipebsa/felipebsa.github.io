@@ -36,7 +36,6 @@ document.addEventListener('click', (e) => {
   if (!navbar.contains(e.target)) abrirMenu(false);
 });
 
-// marca na navbar a seção que tá na tela
 const observarSecao = new IntersectionObserver(
   (entradas) => {
     entradas.forEach((entrada) => {
@@ -107,9 +106,6 @@ if (matchMedia('(hover: hover)').matches) {
 }
 
 // chuva
-// no pc ela fica na lateral esquerda; no celular vai pro fundo, bem fraquinha
-// cada gota cai reta e termina num traço tipo ------\____/--
-// as posições são da página, então a chuva não acompanha a rolagem
 const canvas = document.getElementById('rain');
 const ctx = canvas.getContext('2d');
 
@@ -138,7 +134,6 @@ function novaGota(comecarNoMeio) {
   const yInicio = naGrade(aleatorio(-200, alturaPagina));
   const yFim = yInicio + naGrade(aleatorio(260, 820));
 
-  // vai pro lado que tiver mais espaço
   const lado = x < largura / 2 ? 1 : -1;
   const espaco = lado === 1 ? largura - x - GRADE : x - GRADE;
   const u = Math.max(GRADE / 2, Math.min(GRADE * 1.5, espaco / 7));
@@ -203,7 +198,6 @@ function desenharGota(gota) {
   const ate = Math.min(gota.cabeca, gota.total);
   if (ate <= de) return;
 
-  // o rastro vai ficando mais fino e apagado no final
   let anterior = pontoNoCaminho(gota, de);
   for (let d = de + 4; d <= ate; d += 4) {
     const atual = pontoNoCaminho(gota, d);
@@ -242,7 +236,6 @@ function animar(agora) {
   gotas.forEach((gota, i) => {
     gota.cabeca += gota.velocidade * dt;
     if (gota.cabeca - gota.rastro > gota.total) gotas[i] = gota = novaGota(false);
-    // só desenha o que tá aparecendo na tela
     if (gota.base > scrollY && gota.topo < scrollY + altura) desenharGota(gota);
   });
 
@@ -262,7 +255,6 @@ function montarChuva() {
   alturaPagina = root.scrollHeight;
   dpr = Math.min(devicePixelRatio, 2);
 
-  // em tela menor não sobra espaço do lado, então a chuva vai pro fundo
   noFundo = lateral < 80;
   largura = noFundo ? innerWidth : lateral;
   canvas.classList.toggle('rain--fundo', noFundo);
@@ -285,8 +277,6 @@ if (!reduzirMovimento) {
     espera = setTimeout(montarChuva, 150);
   };
 
-  // no celular a barra do navegador muda a altura ao rolar;
-  // aí só ajusta o tamanho do canvas, sem sortear as gotas de novo
   let ultimaLargura = innerWidth;
   addEventListener('resize', () => {
     if (innerWidth === ultimaLargura) return ajustarCanvas();
@@ -294,7 +284,6 @@ if (!reduzirMovimento) {
     remontar();
   });
 
-  // a página cresce quando as imagens terminam de carregar
   let ultimaAltura = 0;
   new ResizeObserver(() => {
     if (Math.abs(root.scrollHeight - ultimaAltura) > 50) {
