@@ -72,5 +72,5 @@ Hosted on **GitHub Pages**. Since the repository is named `felipebsa.github.io`,
 Backend developer in training, Systems Development student at ETEC Vasco Antônio Venchiarutti
 
 - GitHub: [github.com/felipebsa](https://github.com/felipebsa)
-- LinkedIn: [felipe-barbosa-santos](https://linkedin.com/in/felipe-barbosa-santos-b402a33a8)
+- LinkedIn: [felipebsa](https://linkedin.com/in/felipebsa)
 - Instagram: [@felipe__bsa](https://www.instagram.com/felipe__bsa/)
