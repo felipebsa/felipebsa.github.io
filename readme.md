@@ -49,6 +49,7 @@ felipebsa.github.io/
     ├── cursor.svg
     ├── cursor-pointer.svg
     ├── favicon.svg
+    ├── og-image.jpg
     └── felipe-barbosa-curriculo.pdf
 ```
 
